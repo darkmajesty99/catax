@@ -4322,3 +4322,12 @@ Metric.ConnectionInfo = "127.0.0.1;8086;worldserver"
 Metric.OverallStatusInterval = 1
 
 ###################################################################################################
+
+#
+#    SoloLFG.Enable
+#        Description: Allows a single player to complete an LFG dungeon
+#                     without waiting for additional players.
+#        Default:     0 - Disabled
+#                     1 - Enabled
+
+SoloLFG.Enable = 1
