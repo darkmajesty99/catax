@@ -4331,3 +4331,33 @@ Metric.OverallStatusInterval = 1
 #                     1 - Enabled
 
 SoloLFG.Enable = 1
+
+#
+#    AutoBalance.Enable
+#        Description: Enables automatic scaling of creature health and melee damage in dungeons
+#                     and raids according to the number of non-GM players in the instance.
+#                     Battlegrounds and arenas are excluded.
+#        Default:     0 - Disabled
+#                     1 - Enabled
+
+AutoBalance.Enable = 1
+
+#
+#    AutoBalance.HealthMultiplier
+#        Description: Additional multiplier applied to autobalanced creature health.
+#                     The base scale is players / the instance's configured maximum player count.
+#                     For example, a solo player in a five-player dungeon uses 20% of the normal
+#                     health with a value of 1.0, 30% with 1.5, and 10% with 0.5.
+#        Default:     1.0
+
+AutoBalance.HealthMultiplier = 1.0
+
+#
+#    AutoBalance.DamageMultiplier
+#        Description: Additional multiplier applied to autobalanced creature melee damage.
+#                     The base scale is players / the instance's configured maximum player count.
+#                     For example, a solo player in a five-player dungeon uses 20% of the normal
+#                     melee damage with a value of 1.0, 30% with 1.5, and 10% with 0.5.
+#        Default:     1.0
+
+AutoBalance.DamageMultiplier = 1.0

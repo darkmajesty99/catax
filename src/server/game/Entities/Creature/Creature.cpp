@@ -20,6 +20,7 @@
 #include "CellImpl.h"
 #include "CharmInfo.h"
 #include "Common.h"
+#include "Config.h"
 #include "Containers.h"
 #include "CreatureAI.h"
 #include "CreatureAISelector.h"
@@ -58,6 +59,26 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include <G3D/g3dmath.h>
+
+namespace
+{
+    float GetAutoBalanceMultiplier(Creature const* creature)
+    {
+        if (!sConfigMgr->GetBoolDefault("AutoBalance.Enable", false) || creature->IsPet() || creature->IsGuardian())
+            return 1.0f;
+
+        InstanceMap const* instance = creature->GetMap()->ToInstanceMap();
+        if (!instance || instance->IsBattlegroundOrArena())
+            return 1.0f;
+
+        uint32 maxPlayers = instance->GetMaxPlayers();
+        if (maxPlayers <= 1)
+            return 1.0f;
+
+        uint32 players = std::max<uint32>(1, instance->GetPlayersCountExceptGMs());
+        return std::min(1.0f, float(players) / float(maxPlayers));
+    }
+}
 
 VendorItemCount::VendorItemCount(uint32 _item, uint32 _count)
     : itemId(_item), count(_count), lastIncrementTime(GameTime::GetGameTime()) { }
@@ -1441,6 +1462,9 @@ void Creature::UpdateLevelDependantStats()
 
     uint32 basehp = stats->GenerateHealth(cInfo);
     uint32 health = uint32(basehp * healthmod);
+    float autoBalanceMultiplier = GetAutoBalanceMultiplier(this);
+    float healthMultiplier = std::max(0.0f, sConfigMgr->GetFloatDefault("AutoBalance.HealthMultiplier", 1.0f));
+    health = std::max<uint32>(1, uint32(float(health) * autoBalanceMultiplier * healthMultiplier));
 
     SetCreateHealth(health);
     SetMaxHealth(health);
@@ -1468,9 +1492,11 @@ void Creature::UpdateLevelDependantStats()
 
     // damage
     float basedamage = stats->GenerateBaseDamage(cInfo);
+    float damageMultiplier = autoBalanceMultiplier
+        * std::max(0.0f, sConfigMgr->GetFloatDefault("AutoBalance.DamageMultiplier", 1.0f));
 
-    float weaponBaseMinDamage = basedamage;
-    float weaponBaseMaxDamage = basedamage * 1.5f;
+    float weaponBaseMinDamage = basedamage * damageMultiplier;
+    float weaponBaseMaxDamage = basedamage * 1.5f * damageMultiplier;
 
     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, weaponBaseMinDamage);
     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, weaponBaseMaxDamage);
