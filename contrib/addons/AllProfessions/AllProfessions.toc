@@ -1,0 +1,7 @@
+## Interface: 40300
+## Title: All Professions
+## Notes: Displays all primary professions learned by the character.
+## Author: TrinityCore
+## Version: 1.0.0
+
+AllProfessions.lua
