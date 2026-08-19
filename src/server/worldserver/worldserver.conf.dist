@@ -4377,3 +4377,21 @@ SoloRaidHealthBoost.AccountId = 0
 #        Default:     10.0
 
 SoloRaidHealthBoost.Multiplier = 10.0
+
+#
+#    SoloRaidDamageBoost.AccountId
+#        Description: Account ID whose damage against creatures is multiplied to support solo raid
+#                     play. Player-controlled creatures are excluded. Set to 0 to disable the
+#                     boost.
+#        Default:     0 - Disabled
+
+SoloRaidDamageBoost.AccountId = 0
+
+#
+#    SoloRaidDamageBoost.Multiplier
+#        Description: Multiplier applied to damage dealt by characters on the configured account
+#                     against non-player-controlled creatures. Values less than or equal to 0 are
+#                     ignored.
+#        Default:     1.0
+
+SoloRaidDamageBoost.Multiplier = 1.0

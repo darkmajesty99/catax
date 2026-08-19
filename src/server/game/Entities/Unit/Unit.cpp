@@ -31,6 +31,7 @@
 #include "CombatLogPackets.h"
 #include "CombatPackets.h"
 #include "Common.h"
+#include "Config.h"
 #include "ConditionMgr.h"
 #include "Containers.h"
 #include "CreatureAI.h"
@@ -92,6 +93,7 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include <cmath>
+#include <limits>
 #include <queue>
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
@@ -750,6 +752,19 @@ bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) cons
 
 /*static*/ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, uint32 unmitigatedDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellInfo const* spellProto, bool durabilityLoss)
 {
+    if (Player* player = attacker ? attacker->ToPlayer() : nullptr)
+    {
+        Creature* target = victim->ToCreature();
+        uint32 boostedAccountId = sConfigMgr->GetIntDefault("SoloRaidDamageBoost.AccountId", 0);
+        if (target && !target->IsControlledByPlayer() && boostedAccountId
+            && player->GetSession()->GetAccountId() == boostedAccountId)
+        {
+            float multiplier = sConfigMgr->GetFloatDefault("SoloRaidDamageBoost.Multiplier", 1.0f);
+            if (multiplier > 0.0f)
+                damage = uint32(std::min(double(damage) * multiplier, double(std::numeric_limits<uint32>::max())));
+        }
+    }
+
     // Sparring Checks
     if (Creature* target = victim->ToCreature())
     {
