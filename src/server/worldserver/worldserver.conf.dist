@@ -4361,3 +4361,19 @@ AutoBalance.HealthMultiplier = 1.0
 #        Default:     1.0
 
 AutoBalance.DamageMultiplier = 1.0
+
+#
+#    SoloRaidHealthBoost.AccountId
+#        Description: Account ID whose character health is multiplied to support solo raid play.
+#                     Set to 0 to disable the boost.
+#        Default:     0 - Disabled
+
+SoloRaidHealthBoost.AccountId = 0
+
+#
+#    SoloRaidHealthBoost.Multiplier
+#        Description: Multiplier applied to the maximum health of characters on the configured
+#                     account. Values less than or equal to 0 are ignored.
+#        Default:     10.0
+
+SoloRaidHealthBoost.Multiplier = 10.0

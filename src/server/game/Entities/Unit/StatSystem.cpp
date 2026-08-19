@@ -19,6 +19,7 @@
 
 #include <numeric>
 
+#include "Config.h"
 #include "Creature.h"
 #include "DBCStores.h"
 #include "Item.h"
@@ -351,8 +352,13 @@ void Player::UpdateMaxHealth()
     value += GetFlatModifierValue(unitMod, TOTAL_VALUE) + GetHealthBonusFromStamina();
     value *= GetPctModifierValue(unitMod, TOTAL_PCT);
 
-    // modificado temporariamente apenas para eu poder fazer as raids solo.
-    if (GetSession()->GetAccountId() == 1) value *= 100.0f;
+    uint32 boostedAccountId = sConfigMgr->GetIntDefault("SoloRaidHealthBoost.AccountId", 0);
+    if (boostedAccountId && GetSession()->GetAccountId() == boostedAccountId)
+    {
+        float multiplier = sConfigMgr->GetFloatDefault("SoloRaidHealthBoost.Multiplier", 10.0f);
+        if (multiplier > 0.0f)
+            value *= multiplier;
+    }
 
     float healthPct = GetHealthPct();
     SetMaxHealth(static_cast<uint32>(value));
