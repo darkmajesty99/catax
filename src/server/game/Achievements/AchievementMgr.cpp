@@ -2965,7 +2965,8 @@ bool AchievementMgr<T>::AdditionalRequirementsSatisfied(AchievementCriteriaEntry
             {
                 Guild* guild = referencePlayer->GetGuild();
                 Group* group = referencePlayer->GetGroup();
-                if (!guild || !group || !group->IsGuildGroupFor(referencePlayer))
+                if (!guild || (!sConfigMgr->GetBoolDefault("SoloGuildAchievements.Enable", false)
+                    && (!group || !group->IsGuildGroupFor(referencePlayer))))
                     return false;
                 break;
             }

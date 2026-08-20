@@ -4395,3 +4395,13 @@ SoloRaidDamageBoost.AccountId = 0
 #        Default:     1.0
 
 SoloRaidDamageBoost.Multiplier = 1.0
+
+#
+#    SoloGuildAchievements.Enable
+#        Description: Allows a guild member to meet guild achievement criteria that normally
+#                     require a guild group while playing alone. The character must still belong
+#                     to a guild.
+#        Default:     0 - Disabled
+#                     1 - Enabled
+
+SoloGuildAchievements.Enable = 0
