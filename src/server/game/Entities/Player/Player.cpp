@@ -1611,6 +1611,67 @@ bool Player::TeleportTo(WorldLocation const& loc, TeleportToOptions options /*= 
     return TeleportTo(loc.GetMapId(), loc.GetPositionX(), loc.GetPositionY(), loc.GetPositionZ(), loc.GetOrientation(), options, instanceId);
 }
 
+// Server-side relocation for socket-less bot sessions.
+// Player::TeleportTo() / Unit::NearTeleportTo() cannot be used here because
+// the near-teleport path sends SMSG_MOVE_TELEPORT and then waits for a
+// CMSG_MOVE_TELEPORT_ACK from the client before committing the new position.
+// A bot session has no real socket, so that ACK never arrives and the bot
+// would be stuck indefinitely in IsBeingTeleportedNear().
+//
+// Approach: destroy + create cycle.
+// 1. DestroyForNearbyPlayers() — while still at the old position, send
+//    SMSG_DESTROY_OBJECT to every nearby player that has this bot in its
+//    m_clientGUIDs set and clear those entries.  The client will immediately
+//    stop rendering the bot at the stale location.
+// 2. UpdatePosition(dest, true) — move the bot server-side (Map::PlayerRelocation
+//    updates the grid cell and sets NOTIFY_VISIBILITY_CHANGED).
+// 3. UpdateObjectVisibility(true) — forced visibility pass: because the bot was
+//    just removed from every observer's m_clientGUIDs, HaveAtClient() returns
+//    false for all nearby players, so BuildCreateUpdateBlockForPlayer() is called
+//    for each of them and the bot appears at the new position.
+// 4. SetFallInformation — reset fall-tracking to the new Z.
+void Player::BotRelocate(Position const& dest)
+{
+    ASSERT(GetSession() && GetSession()->IsBotSession(), "BotRelocate requires a valid bot session; called on a player without a session or on a non-bot session");
+    DisableSpline();
+
+    DestroyForNearbyPlayers();
+    UpdatePosition(dest, true);
+    UpdateObjectVisibility(true);
+    SetFallInformation(0, GetPositionZ());
+}
+
+bool Player::BotTeleport(uint32 mapId, float x, float y, float z, float orientation)
+{
+    ASSERT(GetSession() && GetSession()->IsBotSession(), "BotTeleport requires a valid bot session");
+
+    // Same-map: just relocate in place, no cross-map machinery needed.
+    if (mapId == GetMapId())
+    {
+        BotRelocate(Position(x, y, z, orientation));
+        return true;
+    }
+
+    // Cross-map: let TeleportTo() set up the transfer state.
+    if (!TeleportTo(mapId, x, y, z, orientation))
+    {
+        TC_LOG_ERROR("bot", "BotTeleport: TeleportTo failed for bot '%s' (map %u -> %u).",
+            GetName().c_str(), GetMapId(), mapId);
+        return false;
+    }
+
+    // TeleportTo() succeeded – the far semaphore must be active.
+    if (!IsBeingTeleportedFar())
+    {
+       TC_LOG_WARN("bot", "BotTeleport: TeleportTo succeeded but far semaphore is not set for bot '%s' (target map %u). Aborting.",
+            GetName().c_str(), mapId);
+        return false;
+    }
+
+    GetSession()->HandleMoveWorldportAck();
+    return true;
+}
+
 bool Player::TeleportToBGEntryPoint()
 {
     if (m_bgData.joinPos.m_mapId == MAPID_INVALID)
