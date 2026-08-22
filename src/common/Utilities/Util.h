@@ -42,6 +42,34 @@ namespace Trinity
     inline std::vector<std::string_view> Tokenize(char const* str, char sep, bool keepEmpty) { return Tokenize(std::string_view(str ? str : ""), sep, keepEmpty); }
 }
 
+class TC_COMMON_API Tokenizer
+{
+public:
+    typedef std::vector<char const*> StorageType;
+
+    typedef StorageType::size_type size_type;
+
+    typedef StorageType::const_iterator const_iterator;
+    typedef StorageType::reference reference;
+    typedef StorageType::const_reference const_reference;
+
+public:
+    Tokenizer(const std::string &src, char const sep, uint32 vectorReserve = 0, bool keepEmptyStrings = true);
+    ~Tokenizer() { delete[] m_str; }
+
+    const_iterator begin() const { return m_storage.begin(); }
+    const_iterator end() const { return m_storage.end(); }
+
+    size_type size() const { return m_storage.size(); }
+
+    reference operator [] (size_type i) { return m_storage[i]; }
+    const_reference operator [] (size_type i) const { return m_storage[i]; }
+
+private:
+    char* m_str;
+    StorageType m_storage;
+};
+
 TC_COMMON_API void stripLineInvisibleChars(std::string &src);
 
 TC_COMMON_API Optional<int64> MoneyStringToMoney(std::string const& moneyString);
