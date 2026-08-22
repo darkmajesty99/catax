@@ -1600,7 +1600,15 @@ INSERT INTO `rbac_linked_permissions` VALUES
 (199,496),
 (199,507),
 (199,525),
-(199,534);
+(199,534),
+(196,1436),
+(196,1437),
+(196,1438),
+(196,1439),
+(197,1436),
+(197,1437),
+(197,1438),
+(197,1439);
 /*!40000 ALTER TABLE `rbac_linked_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2290,7 +2298,12 @@ INSERT INTO `rbac_permissions` VALUES
 (867,'Command: reload quest_greeting_locale'),
 (870,'Command: debug threatinfo'),
 (872,'Command: server debug'),
-(873,'Command: reload creature_movement_override');
+(873,'Command: reload creature_movement_override'),
+(1434,'Command: anticheat'),
+(1436,'Command: bot spawn'),
+(1437,'Command: bot despawn'),
+(1438,'Command: bot move'),
+(1439,'Command: bot teleport');
 /*!40000 ALTER TABLE `rbac_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
