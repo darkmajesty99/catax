@@ -659,6 +659,10 @@ class TC_GAME_API WorldSession
         void SetBotSession() { m_isBotSession = true; }
         void SpawnBotPlayerAsync(ObjectGuid guid);
 
+        // Cleanly shuts down a bot session: logs out the player (if still attached)
+        // and clears the bot-session flag so World::UpdateSessions() will erase it.
+        void KillBotSession();
+
         // Recruit-A-Friend Handling
         uint32 GetRecruiterId() const { return recruiterId; }
         bool IsARecruiter() const { return isRecruiter; }
