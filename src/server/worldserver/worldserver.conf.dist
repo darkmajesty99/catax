@@ -74,7 +74,7 @@ RealmID = 1
 #        Example:     "@prefix@/share/trinitycore"
 #        Default:     "."
 
-DataDir = "."
+DataDir = "/home/imncadsii/cata/run/etc"
 
 #
 #    LogsDir
@@ -83,7 +83,7 @@ DataDir = "."
 #                     Logs directory must exists, or log file creation will be disabled.
 #        Default:     "" - (Log files will be stored in the current path)
 
-LogsDir = ""
+LogsDir = "/home/imncadsii/cata/run/bin"
 
 #
 #    LoginDatabaseInfo
@@ -107,10 +107,10 @@ LogsDir = ""
 #    Don't open port on firewall to external connections (it belongs to mysql, not to wow server).
 #    The username you choose must have permisions to create/alter/rename tables.
 
-LoginDatabaseInfo     = "127.0.0.1;3306;trinity;trinity;auth"
-WorldDatabaseInfo     = "127.0.0.1;3306;trinity;trinity;world"
-CharacterDatabaseInfo = "127.0.0.1;3306;trinity;trinity;characters"
-HotfixDatabaseInfo    = "127.0.0.1;3306;trinity;trinity;hotfixes"
+LoginDatabaseInfo     = "127.0.0.1;3306;acore;tralala12;auth"
+WorldDatabaseInfo     = "127.0.0.1;3306;acore;tralala12;world"
+CharacterDatabaseInfo = "127.0.0.1;3306;acore;tralala12;characters"
+HotfixDatabaseInfo    = "127.0.0.1;3306;acore;tralala12;hotfixes"
 
 #
 #    LoginDatabase.WorkerThreads
@@ -273,7 +273,7 @@ Compression = 1
 #        Default:     0   - (Disabled, Both sockets are used and required)
 #                     1   - (Enabled, One the first socket is being used)
 
-LegacyConnectionModeEnabled = 0
+LegacyConnectionModeEnabled = 1
 
 #
 #    PlayerLimit
@@ -541,7 +541,7 @@ Auction.SearchDelay = 300
 #        Example:     "./world.pid" - (Enabled)
 #        Default:     ""            - (Disabled)
 
-PidFile = ""
+PidFile = "/home/imncadsii/cata/run/bin/world.pid"
 
 #
 #    PacketLogFile
@@ -819,7 +819,7 @@ CharacterCreating.MinLevelForDeathKnight = 55
 #                     1 - (Show intro only for first character of selected race)
 #                     2 - (Disable intro for all classes)
 
-SkipCinematics = 0
+SkipCinematics = 2
 
 #
 #    MaxPlayerLevel
@@ -936,7 +936,7 @@ Instance.IgnoreLevel = 0
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-Instance.IgnoreRaid = 0
+Instance.IgnoreRaid = 1
 
 #
 #    Instance.ResetTimeHour
@@ -2539,7 +2539,7 @@ Death.Bones.BattlegroundOrArena = 1
 #        Default:     1 - (Enabled)
 #                     0 - (Disabled)
 
-Die.Command.Mode = 1
+Die.Command.Mode = 0
 
 #
 ###################################################################################################
@@ -3065,7 +3065,7 @@ Ra.MinLevel = 3
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
 
-SOAP.Enabled = 0
+SOAP.Enabled = 1
 
 #
 #    SOAP.IP
@@ -3381,6 +3381,89 @@ PreventRenameCharacterOnCustomization = 0
 
 #
 ###################################################################################################
+
+#
+#    SoloLFG.Enable
+#        Description: Allows a single player to complete an LFG dungeon
+#                     without waiting for additional players.
+#        Default:     0 - Disabled
+#                     1 - Enabled
+
+SoloLFG.Enable = 1
+
+#
+#    AutoBalance.Enable
+#        Description: Enables automatic scaling of creature health and melee damage in dungeons
+#                     and raids according to the number of non-GM players in the instance.
+#                     Battlegrounds and arenas are excluded.
+#        Default:     0 - Disabled
+#                     1 - Enabled
+
+AutoBalance.Enable = 1
+
+#
+#    AutoBalance.HealthMultiplier
+#        Description: Additional multiplier applied to autobalanced creature health.
+#                     The base scale is players / the instance's configured maximum player count.
+#                     For example, a solo player in a five-player dungeon uses 20% of the normal
+#                     health with a value of 1.0, 30% with 1.5, and 10% with 0.5.
+#        Default:     1.0
+
+AutoBalance.HealthMultiplier = 1.0
+
+#
+#    AutoBalance.DamageMultiplier
+#        Description: Additional multiplier applied to autobalanced creature melee damage.
+#                     The base scale is players / the instance's configured maximum player count.
+#                     For example, a solo player in a five-player dungeon uses 20% of the normal
+#                     melee damage with a value of 1.0, 30% with 1.5, and 10% with 0.5.
+#        Default:     1.0
+
+AutoBalance.DamageMultiplier = 1.0
+
+#
+#    SoloRaidHealthBoost.AccountId
+#        Description: Account ID whose character health is multiplied to support solo raid play.
+#                     Set to 0 to disable the boost.
+#        Default:     0 - Disabled
+
+SoloRaidHealthBoost.AccountId = 0
+
+#
+#    SoloRaidHealthBoost.Multiplier
+#        Description: Multiplier applied to the maximum health of characters on the configured
+#                     account. Values less than or equal to 0 are ignored.
+#        Default:     10.0
+
+SoloRaidHealthBoost.Multiplier = 10.0
+
+#
+#    SoloRaidDamageBoost.AccountId
+#        Description: Account ID whose damage against creatures is multiplied to support solo raid
+#                     play. Player-controlled creatures are excluded. Set to 0 to disable the
+#                     boost.
+#        Default:     0 - Disabled
+
+SoloRaidDamageBoost.AccountId = 0
+
+#
+#    SoloRaidDamageBoost.Multiplier
+#        Description: Multiplier applied to damage dealt by characters on the configured account
+#                     against non-player-controlled creatures. Values less than or equal to 0 are
+#                     ignored.
+#        Default:     1.0
+
+SoloRaidDamageBoost.Multiplier = 1.0
+
+#
+#    SoloGuildAchievements.Enable
+#        Description: Allows a guild member to meet guild achievement criteria that normally
+#                     require a guild group while playing alone. The character must still belong
+#                     to a guild.
+#        Default:     0 - Disabled
+#                     1 - Enabled
+
+SoloGuildAchievements.Enable = 0
 
 ###################################################################################################
 # AUCTION HOUSE BOT SETTINGS
@@ -4322,86 +4405,3 @@ Metric.ConnectionInfo = "127.0.0.1;8086;worldserver"
 Metric.OverallStatusInterval = 1
 
 ###################################################################################################
-
-#
-#    SoloLFG.Enable
-#        Description: Allows a single player to complete an LFG dungeon
-#                     without waiting for additional players.
-#        Default:     0 - Disabled
-#                     1 - Enabled
-
-SoloLFG.Enable = 1
-
-#
-#    AutoBalance.Enable
-#        Description: Enables automatic scaling of creature health and melee damage in dungeons
-#                     and raids according to the number of non-GM players in the instance.
-#                     Battlegrounds and arenas are excluded.
-#        Default:     0 - Disabled
-#                     1 - Enabled
-
-AutoBalance.Enable = 1
-
-#
-#    AutoBalance.HealthMultiplier
-#        Description: Additional multiplier applied to autobalanced creature health.
-#                     The base scale is players / the instance's configured maximum player count.
-#                     For example, a solo player in a five-player dungeon uses 20% of the normal
-#                     health with a value of 1.0, 30% with 1.5, and 10% with 0.5.
-#        Default:     1.0
-
-AutoBalance.HealthMultiplier = 1.0
-
-#
-#    AutoBalance.DamageMultiplier
-#        Description: Additional multiplier applied to autobalanced creature melee damage.
-#                     The base scale is players / the instance's configured maximum player count.
-#                     For example, a solo player in a five-player dungeon uses 20% of the normal
-#                     melee damage with a value of 1.0, 30% with 1.5, and 10% with 0.5.
-#        Default:     1.0
-
-AutoBalance.DamageMultiplier = 1.0
-
-#
-#    SoloRaidHealthBoost.AccountId
-#        Description: Account ID whose character health is multiplied to support solo raid play.
-#                     Set to 0 to disable the boost.
-#        Default:     0 - Disabled
-
-SoloRaidHealthBoost.AccountId = 0
-
-#
-#    SoloRaidHealthBoost.Multiplier
-#        Description: Multiplier applied to the maximum health of characters on the configured
-#                     account. Values less than or equal to 0 are ignored.
-#        Default:     10.0
-
-SoloRaidHealthBoost.Multiplier = 10.0
-
-#
-#    SoloRaidDamageBoost.AccountId
-#        Description: Account ID whose damage against creatures is multiplied to support solo raid
-#                     play. Player-controlled creatures are excluded. Set to 0 to disable the
-#                     boost.
-#        Default:     0 - Disabled
-
-SoloRaidDamageBoost.AccountId = 0
-
-#
-#    SoloRaidDamageBoost.Multiplier
-#        Description: Multiplier applied to damage dealt by characters on the configured account
-#                     against non-player-controlled creatures. Values less than or equal to 0 are
-#                     ignored.
-#        Default:     1.0
-
-SoloRaidDamageBoost.Multiplier = 1.0
-
-#
-#    SoloGuildAchievements.Enable
-#        Description: Allows a guild member to meet guild achievement criteria that normally
-#                     require a guild group while playing alone. The character must still belong
-#                     to a guild.
-#        Default:     0 - Disabled
-#                     1 - Enabled
-
-SoloGuildAchievements.Enable = 0
