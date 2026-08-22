@@ -2299,7 +2299,6 @@ INSERT INTO `rbac_permissions` VALUES
 (870,'Command: debug threatinfo'),
 (872,'Command: server debug'),
 (873,'Command: reload creature_movement_override'),
-(1434,'Command: anticheat'),
 (1436,'Command: bot spawn'),
 (1437,'Command: bot despawn'),
 (1438,'Command: bot move'),
