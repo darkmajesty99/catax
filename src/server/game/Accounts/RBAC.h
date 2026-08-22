@@ -779,6 +779,10 @@ enum RBACPermissions
     // IF YOU ADD NEW PERMISSIONS, ADD THEM IN MASTER BRANCH AS WELL!
     //
     // custom permissions 1000+
+    RBAC_PERM_COMMAND_BOT_SPAWN    = 1436, // PoC bot session bootstrap
+    RBAC_PERM_COMMAND_BOT_DESPAWN  = 1437, // .bot despawn <charname>
+    RBAC_PERM_COMMAND_BOT_MOVE      = 1438, // .bot move <charname> <x> <y> <z>
+    RBAC_PERM_COMMAND_BOT_TELEPORT  = 1439, // .bot teleport <charname> <mapId> <x> <y> <z> [<o>]
     RBAC_PERM_MAX
 };
 
