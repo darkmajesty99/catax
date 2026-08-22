@@ -23,6 +23,7 @@
 #include "AccountMgr.h"
 #include "AddonMgr.h"
 #include "AuthenticationPackets.h"
+#include "BotMgr.h"
 #include "BattlegroundMgr.h"
 #include "Common.h"
 #include "Config.h"
@@ -661,6 +662,10 @@ void WorldSession::LogoutPlayer(bool save)
 
         TC_METRIC_EVENT("player_events", "Logout", _player->GetName());
 
+        //! Unregister from BotMgr before the player object is destroyed
+        if (m_isBotSession)
+            sBotMgr->UnregisterBot(_player->GetGUID());
+
         //! Remove the player from the world
         // the player may not be in the world when logging out
         // e.g if he got disconnected during a transfer to another map
@@ -711,6 +716,24 @@ void WorldSession::KickPlayer()
         }
     }
 }
+
+/// Cleanly shut down a bot session.
+/// Logs out the attached player (if any), then clears the bot-session flag
+/// so that World::UpdateSessions() will erase and delete this session on the
+/// next tick.  Must be called from the main game thread only.
+void WorldSession::KillBotSession()
+{
+    ASSERT(m_isBotSession, "KillBotSession called on a non-bot session (account %u).", GetAccountId());
+
+    if (_player)
+        LogoutPlayer(false);
+
+    // Allow World::UpdateSessions() to erase this session:
+    // Update() returns false when !m_isBotSession && !m_Socket.
+    m_isBotSession = false;
+    TC_LOG_INFO("bot", "BotMgr: Bot session (account %u) marked for cleanup.", GetAccountId());
+}
+
 
 void WorldSession::SendNotification(const char *format, ...)
 {
