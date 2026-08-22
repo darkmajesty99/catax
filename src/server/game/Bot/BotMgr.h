@@ -19,7 +19,7 @@
 
 class Player;
 
-class FC_GAME_API BotMgr
+class TC_GAME_API BotMgr
 {
 public:
     static BotMgr* instance();
