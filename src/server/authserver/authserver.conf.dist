@@ -38,7 +38,7 @@
 #                     Logs directory must exists, or log file creation will be disabled.
 #        Default:     "" - (Log files will be stored in the current path)
 
-LogsDir = ""
+LogsDir = "/home/imncadsii/cata/run/bin"
 
 #
 #    MaxPingTime
@@ -68,7 +68,7 @@ BindIP = "0.0.0.0"
 #        Example:     "./authserver.pid"  - (Enabled)
 #        Default:     ""                  - (Disabled)
 
-PidFile = ""
+PidFile = "/home/imncadsii/cata/run/bin/auth.pid"
 
 #
 #    UseProcessors
@@ -191,7 +191,7 @@ AllowLoggingIPAddressesInDatabase = 1
 #                                                                           Unix/Linux)
 #        Default:     "127.0.0.1;3306;trinity;trinity;auth"
 
-LoginDatabaseInfo = "127.0.0.1;3306;trinity;trinity;auth"
+LoginDatabaseInfo = "127.0.0.1;3306;acore;tralala12;auth"
 
 #
 #    LoginDatabase.WorkerThreads
