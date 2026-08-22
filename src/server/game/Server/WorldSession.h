@@ -654,6 +654,11 @@ class TC_GAME_API WorldSession
             return m_timeOutTime <= 0 && !m_inQueue;
         }
 
+        // Bot session support (PoC bootstrap)
+        bool IsBotSession() const { return m_isBotSession; }
+        void SetBotSession() { m_isBotSession = true; }
+        void SpawnBotPlayerAsync(ObjectGuid guid);
+
         // Recruit-A-Friend Handling
         uint32 GetRecruiterId() const { return recruiterId; }
         bool IsARecruiter() const { return isRecruiter; }
@@ -1407,6 +1412,7 @@ class TC_GAME_API WorldSession
         rbac::RBACData* _RBACData;
         uint32 expireTime;
         bool forceExit;
+        bool m_isBotSession; // PoC: true for sessions without a real network socket
         ObjectGuid m_currentBankerGUID;
 
         std::unique_ptr<boost::circular_buffer<std::pair<int64, uint32>>> _timeSyncClockDeltaQueue; // first member: clockDelta. Second member: latency of the packet exchange that was used to compute that clockDelta.
