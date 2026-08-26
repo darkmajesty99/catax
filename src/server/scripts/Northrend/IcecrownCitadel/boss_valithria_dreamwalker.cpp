@@ -343,6 +343,18 @@ class boss_valithria_dreamwalker : public CreatureScript
                     _events.ScheduleEvent(EVENT_DREAM_SLIP, 3500ms);
                     if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_VALITHRIA_LICH_KING)))
                         lichKing->AI()->EnterEvadeMode();
+
+                    DoCastSelf(SPELL_CLEAR_ALL);
+                    DoCastSelf(SPELL_REPUTATION_BOSS_KILL, true);
+                    // this display id was found in sniff instead of the one on aura
+                    me->SetDisplayId(11686);
+                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    me->DespawnOrUnsummon(4000);
+                    if (Creature* trigger = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_VALITHRIA_TRIGGER)))
+                        Unit::Kill(me, trigger);
+                    
+                    if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_VALITHRIA_LICH_KING)))
+                        lichKing->CastSpell(lichKing, SPELL_SPAWN_CHEST);
                 }
                 else if (!_over75PercentTalkDone && me->HealthAbovePctHealed(75, heal))
                 {
@@ -378,24 +390,6 @@ class boss_valithria_dreamwalker : public CreatureScript
                                 trigger->AI()->DoAction(ACTION_DEATH);
                         }
                     }
-                }
-            }
-
-            void SpellHit(WorldObject* /*caster*/, SpellInfo const* spell) override
-            {
-                if (spell->Id == SPELL_DREAM_SLIP)
-                {
-                    DoCastSelf(SPELL_CLEAR_ALL);
-                    DoCastSelf(SPELL_REPUTATION_BOSS_KILL, true);
-                    // this display id was found in sniff instead of the one on aura
-                    me->SetDisplayId(11686);
-                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    me->DespawnOrUnsummon(4000);
-                    if (Creature* trigger = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_VALITHRIA_TRIGGER)))
-                        Unit::Kill(me, trigger);
-
-                    if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_VALITHRIA_LICH_KING)))
-                        lichKing->CastSpell(lichKing, SPELL_SPAWN_CHEST);
                 }
             }
 
